@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Draw Math Graph Creator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <svg class="logo-icon" viewBox="0 0 32 32" width="32" height="32">
+          <circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2"/>
+          <line x1="4" y1="16" x2="28" y2="16" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+          <line x1="16" y1="4" x2="16" y2="28" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+          <path d="M4 24 Q10 24 13 16 Q16 8 19 16 Q22 24 28 8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <h1>Draw Math Graph Creator</h1>
+      </div>
+      <button class="btn btn-download" id="downloadBtn" title="Download as PNG">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download Graph
+      </button>
+    </header>
+
+    <div class="main-layout">
+      <!-- Sidebar Controls -->
+      <aside class="sidebar">
+        <!-- Function Input -->
+        <section class="panel">
+          <h2 class="panel-title">Add Function</h2>
+          <div class="input-group">
+            <label for="funcInput">f(x) =</label>
+            <input type="text" id="funcInput" placeholder="e.g. sin(x), x^2, 2*x+1" autocomplete="off" spellcheck="false">
+          </div>
+          <div class="input-row">
+            <div class="input-group color-group">
+              <label for="colorInput">Color</label>
+              <input type="color" id="colorInput" value="#6366f1">
+            </div>
+            <div class="input-group">
+              <label for="lineWidth">Width</label>
+              <select id="lineWidth">
+                <option value="1.5">Thin</option>
+                <option value="2.5" selected>Normal</option>
+                <option value="4">Thick</option>
+                <option value="6">Extra Thick</option>
+              </select>
+            </div>
+          </div>
+          <div class="input-row">
+            <div class="input-group">
+              <label for="lineStyle">Style</label>
+              <select id="lineStyle">
+                <option value="solid" selected>Solid</option>
+                <option value="dashed">Dashed</option>
+                <option value="dotted">Dotted</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="addFuncBtn">Add Function</button>
+          <div id="funcError" class="error-msg"></div>
+        </section>
+
+        <!-- Functions List -->
+        <section class="panel">
+          <h2 class="panel-title">Functions</h2>
+          <div id="funcList" class="func-list">
+            <p class="empty-msg">No functions added yet.</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" id="clearAllBtn">Clear All</button>
+        </section>
+
+        <!-- Freehand Drawing -->
+        <section class="panel">
+          <h2 class="panel-title">Freehand Drawing</h2>
+          <div class="toggle-row">
+            <label class="toggle-label" for="drawToggle">Enable Drawing</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="drawToggle">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="input-row">
+            <div class="input-group color-group">
+              <label for="drawColor">Color</label>
+              <input type="color" id="drawColor" value="#ef4444">
+            </div>
+            <div class="input-group">
+              <label for="drawWidth">Width</label>
+              <select id="drawWidth">
+                <option value="2" selected>Normal</option>
+                <option value="4">Thick</option>
+                <option value="6">Extra Thick</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-sm" id="undoDrawBtn">Undo Last Stroke</button>
+          <button class="btn btn-secondary btn-sm" id="clearDrawBtn">Clear Drawing</button>
+        </section>
+
+        <!-- Graph Settings -->
+        <section class="panel">
+          <h2 class="panel-title">Graph Settings</h2>
+          <div class="input-row">
+            <div class="input-group">
+              <label for="xMin">X Min</label>
+              <input type="number" id="xMin" value="-10" step="1">
+            </div>
+            <div class="input-group">
+              <label for="xMax">X Max</label>
+              <input type="number" id="xMax" value="10" step="1">
+            </div>
+          </div>
+          <div class="input-row">
+            <div class="input-group">
+              <label for="yMin">Y Min</label>
+              <input type="number" id="yMin" value="-10" step="1">
+            </div>
+            <div class="input-group">
+              <label for="yMax">Y Max</label>
+              <input type="number" id="yMax" value="10" step="1">
+            </div>
+          </div>
+          <div class="toggle-row">
+            <label class="toggle-label" for="gridToggle">Show Grid</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="gridToggle" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <label class="toggle-label" for="axisLabels">Axis Labels</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="axisLabels" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <button class="btn btn-secondary btn-sm" id="resetViewBtn">Reset View</button>
+        </section>
+
+        <!-- Presets -->
+        <section class="panel">
+          <h2 class="panel-title">Quick Presets</h2>
+          <div class="presets-grid">
+            <button class="btn btn-preset" data-func="sin(x)">sin(x)</button>
+            <button class="btn btn-preset" data-func="cos(x)">cos(x)</button>
+            <button class="btn btn-preset" data-func="tan(x)">tan(x)</button>
+            <button class="btn btn-preset" data-func="x^2">x²</button>
+            <button class="btn btn-preset" data-func="x^3">x³</button>
+            <button class="btn btn-preset" data-func="sqrt(x)">√x</button>
+            <button class="btn btn-preset" data-func="abs(x)">|x|</button>
+            <button class="btn btn-preset" data-func="log(x)">ln(x)</button>
+            <button class="btn btn-preset" data-func="1/x">1/x</button>
+            <button class="btn btn-preset" data-func="2^x">2^x</button>
+            <button class="btn btn-preset" data-func="floor(x)">⌊x⌋</button>
+            <button class="btn btn-preset" data-func="sin(x)/x">sinc(x)</button>
+          </div>
+        </section>
+      </aside>
+
+      <!-- Graph Canvas Area -->
+      <main class="graph-area">
+        <div class="canvas-wrapper" id="canvasWrapper">
+          <canvas id="graphCanvas"></canvas>
+          <canvas id="drawCanvas"></canvas>
+          <div id="coordTooltip" class="coord-tooltip"></div>
+        </div>
+        <div class="graph-footer">
+          <span id="cursorCoords" class="cursor-coords">Move cursor over graph</span>
+          <span class="zoom-hint">Scroll to zoom · Drag to pan</span>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
